@@ -1,9 +1,13 @@
+import numpy as np
+import pandas as pd
+import re
+
 def clean_signatures(signature_list):
   """
     This function takes in a list of signatures and returns a data frame of the results
 
     Keyword arguments:
-    signature_list -- a list of strings to be cleaned. specifically
+    signature_list -- a list of strings to be cleaned for hair products
 
   """
   for s in signature_list:
@@ -193,4 +197,11 @@ def clean_signatures(signature_list):
         products.append(s)
         products.append(s)
     else:
-        products.append(s)   
+        products.append(s)
+
+    # Put the resulting lists into a dictionary for then making a dataframe
+    characteristics_dict = {'curl_pattern': curls, 'density': density, 'porosity': porosity, 'texture': texture, 'products': products}
+
+    signature_df = pd.DataFrame(characteristics_dict)
+
+    return signature_df 
