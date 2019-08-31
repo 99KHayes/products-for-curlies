@@ -10,6 +10,12 @@ def clean_signatures(signature_list):
     signature_list -- a list of strings to be cleaned for hair products
 
   """
+  curls = []
+  density = []
+  porosity = []
+  texture = []
+  products = []
+
   for s in signature_list:
       # Clean up the signatures
     # Take the four characteristics and put them in lists (put absent ones as null values) while removing them
@@ -17,14 +23,9 @@ def clean_signatures(signature_list):
     # put the remainder into a string of no puntation and lowercase(inspect these and maybe apply stop words...maybe)
     # Finally read the string
 
-    curls = []
-    density = []
-    porosity = []
-    texture = []
-    products = []
 
-    # maybe make a seperate clean up function fromthe make a data frame function with all of this substitutions and different product names
-    s = samples[3]
+
+    # maybe make a seperate clean up function from the make a data frame function with all of this substitutions and different product names
     s = re.sub(r'[^a-zA-Z0-9\s]', ' ', s)
     s = s.lower()
     s = re.sub(r"\n", " ", s)
@@ -56,6 +57,8 @@ def clean_signatures(signature_list):
         #if error put np.nan into list for first instance and set a variable for other characteristics to know if they need to put two row
         two_shapes = False
 
+    s = re.sub("  ", " ",s)
+    s = re.sub("   ", " ",s)
 
     ##################
     ### Texture Patten
@@ -104,8 +107,14 @@ def clean_signatures(signature_list):
         else:
             texture.append(fine_result.group())
     else:
-        texture.append(np.nan)
+        if two_shapes:
+            texture.append(np.nan)
+            texture.append(np.nan)
+        else:
+            texture.append(np.nan)
 
+    s = re.sub("  ", " ",s)
+    s = re.sub("   ", " ",s)
 
     ##################
     ### Porosity Pattern
@@ -127,7 +136,8 @@ def clean_signatures(signature_list):
         else:
             porosity.append(np.nan)
 
-
+    s = re.sub("  ", " ",s)
+    s = re.sub("   ", " ",s)
 
     ##################
     ### Density Pattern
@@ -176,7 +186,12 @@ def clean_signatures(signature_list):
             density.append(thick_result.group())
 
     else:
-        density.append(np.nan)
+        if two_shapes:
+            density.append(np.nan)
+            density.append(np.nan)
+        else:
+            density.append(np.nan)
+
 
 
     #### Maybe go back now and remove third curl pattern references, medium, fine, thick, thin,corse etc since it must have ben two parters
@@ -204,4 +219,4 @@ def clean_signatures(signature_list):
 
     signature_df = pd.DataFrame(characteristics_dict)
 
-    return signature_df 
+    return signature_df
