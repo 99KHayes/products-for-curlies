@@ -9,7 +9,7 @@ def sorted_signatures(signature_list):
     Keyword arguments:
     signature_list -- a list of strings to be cleaned for hair products
     """
-    # Clean up the signatures
+    # sort the signatures up the signatures
     # Take the four characteristics and put them in lists (put absent ones as null values) while removing them
     # remove www, http, cg, cgm completly
     # put the remainder into a string of no puntation and lowercase(inspect these and maybe apply stop words...maybe)
@@ -223,3 +223,60 @@ def sorted_signatures(signature_list):
     signature_df = pd.DataFrame(characteristics_dict)
 
     return signature_df
+
+
+############################################
+
+def cleaned_signatures(sorted_signature_df):
+    """
+    This function takes in a dataframe of already sorted signatures and outputs those signatures cleaned to return only the allowed values for each characteristic and no blank products
+
+    Keyword arguments:
+    sorted_signature_df -- a df of sorted signatures to be cleaned. needs columns named: curl_product, texture, density, porosity, and product. The index is unimportant. Everything should be a string.
+    """
+    # Drop all rows that were null in all characteristics
+    all_nan_dropped_df = sorted_signature_df.dropna(axis=0, how='all', subset=['curl_pattern', 'density', 'porosity', 'texture'], inplace=False)
+
+    # sort the curl_pattern column to only contain the correct values and NaN
+
+    ##################
+    ### Curl shape
+    # Sort out values that are not the allowed values
+    all_nan_dropped_df.loc[(all_nan_dropped_df.curl_pattern != '2a') &
+        (all_nan_dropped_df.curl_pattern  != '2b') & (all_nan_dropped_df.curl_pattern != '2c') &
+        (all_nan_dropped_df.curl_pattern != '3a') & (all_nan_dropped_df.curl_pattern != '3b') & (all_nan_dropped_df.curl_pattern != '3c') & (all_nan_dropped_df.curl_pattern != '4a') & (all_nan_dropped_df.curl_pattern != '4b') & (all_nan_dropped_df.curl_pattern != '4c') &
+        (all_nan_dropped_df.curl_pattern != '1c'), 'curl_pattern'] = np.nan
+
+
+    ##################
+    ### Porosity Pattern
+    # take common words used to decribe the porosity and sort them into one of the three catagories
+    all_nan_dropped_df.loc[all_nan_dropped_df.porosity == 'medium', 'porosity'] = 'normal'
+    all_nan_dropped_df.loc[all_nan_dropped_df.porosity == 'average', 'porosity'] = 'normal'
+
+    # Sort out values that are not the allowed values
+    all_nan_dropped_df.loc[(all_nan_dropped_df.porosity != 'normal') &
+        (all_nan_dropped_df.porosity != 'high') & (all_nan_dropped_df.porosity != 'low'), 'porosity'] = np.nan
+
+
+    ##################
+    ### Density Pattern
+    # take common words used to decribe the density and sort them into one of the three catagories
+    all_nan_dropped_df.loc[all_nan_dropped_df.density == 'normal', 'density'] = 'medium'
+    all_nan_dropped_df.loc[all_nan_dropped_df.density == 'high', 'density'] = 'thick'
+    all_nan_dropped_df.loc[all_nan_dropped_df.density == 'low', 'density'] = 'thin'
+
+    # Sort out values that are not the allowed values
+    all_nan_dropped_df.loc[(all_nan_dropped_df.density != 'medium') &
+        (all_nan_dropped_df.density != 'thin') & (all_nan_dropped_df.density != 'thick'), 'density'] = np.nan
+
+
+    ##################
+    ### Texture Patten
+    # take common words used to decribe the texture and sort them into one of the three catagories
+    all_nan_dropped_df.loc[all_nan_dropped_df.texture == 'normal', 'texture'] = 'medium'
+    all_nan_dropped_df.loc[all_nan_dropped_df.texture == 'course', 'texture'] = 'coarse'
+
+    # Sort out values that are not the allowed values
+    all_nan_dropped_df.loc[(all_nan_dropped_df.texture != 'medium') &
+        (all_nan_dropped_df.texture != 'fine') & (all_nan_dropped_df.texture != 'coarse'), 'texture'] = np.nan
