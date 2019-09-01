@@ -2,7 +2,7 @@ import pymongo
 
 def mongo_cursor():
     """
-    open up a mongo cursor for curly_profiles in the Naturaly_curly_db and query the db for all the signatures and return a list of unique signatures
+    open up a mongo cursor for curly_profiles in the Naturaly_curly_db and query the db for all the signatures and return a list of unique signatures. The computer must be connected to the MongoDB server for this function to work weather through command line or MongoCompass
 
     Keyword arguments:
     none
