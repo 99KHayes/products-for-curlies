@@ -280,3 +280,5 @@ def cleaned_signatures(sorted_signature_df):
     # Sort out values that are not the allowed values
     all_nan_dropped_df.loc[(all_nan_dropped_df.texture != 'medium') &
         (all_nan_dropped_df.texture != 'fine') & (all_nan_dropped_df.texture != 'coarse'), 'texture'] = np.nan
+
+    return all_nan_dropped_df
