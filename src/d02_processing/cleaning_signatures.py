@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import re
 
-def clean_signatures(signature_list):
+def sorted_signatures(signature_list):
     """
     this function takes in a list of signatures and returns a data frame of the results
 
